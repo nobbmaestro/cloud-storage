@@ -1,0 +1,14 @@
+[project]
+name = "cloud_storage"
+version = "0.0.1"
+authors = [
+    {name = "Norbert Batiuk", email= "norbert@batiuk.se"},
+]
+requires-python = ">=3.8"
+readme = "README.md"
+dependencies = ["flask"]
+description = "Cloud Storage Application"
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"

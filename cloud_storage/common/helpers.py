@@ -1,6 +1,5 @@
 """Implements helpers function"""
 
-import re
 from functools import wraps
 
 from flask import redirect, render_template, session

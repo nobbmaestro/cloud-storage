@@ -1,7 +1,8 @@
+"""Implements Application."""
+
 from flask import Flask
 
 from flask_session import Session
-from helpers import apology, login_required
 
 # Configure application
 app = Flask(__name__)
@@ -24,26 +25,5 @@ def after_request(response):
     return response
 
 
-@app.route("/")
-@login_required
-def index():
-    """Show homepage."""
-    return apology("TODO")
-
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    """Register user."""
-    return apology("TODO")
-
-
-@app.route("/logout")
-def logout():
-    """Log user out."""
-    return apology("TODO")
-
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    """Log user in."""
-    return apology("TODO")
+# This is awkward, but this is according to Flash docs: https://flask.palletsprojects.com/en/3.0.x/patterns/packages/
+import cloud_storage.views
