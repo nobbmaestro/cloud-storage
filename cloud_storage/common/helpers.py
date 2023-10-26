@@ -1,5 +1,6 @@
 """Implements helpers function"""
 
+import re
 from functools import wraps
 
 from flask import redirect, render_template, session
@@ -44,3 +45,34 @@ def apology(message, code=400):
         return s
 
     return render_template("apology.html", top=code, bottom=escape(message)), code
+
+
+def validate_password(password):
+    """Validate user password."""
+    special_chars = ("$", "#", "@", "!", "*")
+
+    # Check password length
+    if len(password) < 10:
+        print("Password validation: length not sufficient")
+        valid = False
+
+    # Check weather password contains digits
+    elif re.search("[0-9]", password) is None:
+        print("Password validation: no digits")
+        valid = False
+
+    # Check weather password contains uppercase characters
+    elif re.search("[A-Z]", password) is None:
+        print("Password validation: no uppercase")
+        valid = False
+
+    # Check weather password contains special characters
+    elif not any(c in special_chars for c in password):
+        print("Password validation: no special chars")
+        valid = False
+
+    # Above fulfilled, password is valid
+    else:
+        valid = True
+
+    return valid

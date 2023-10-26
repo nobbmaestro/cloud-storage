@@ -38,3 +38,4 @@ def after_request(response):
 # This is awkward, but this is according to Flash docs
 #   source: https://flask.palletsprojects.com/en/3.0.x/patterns/packages/
 import cloud_storage.views
+import cloud_storage.auth
