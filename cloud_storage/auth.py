@@ -10,9 +10,9 @@ from cloud_storage.common import apology, validate_password
 db = app.config["DATABASE"]
 
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    """Register user."""
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    """Signup user."""
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -54,7 +54,7 @@ def register():
         return redirect("/")
 
     else:
-        return render_template("register.html")
+        return render_template("signup.html")
 
 
 @app.route("/logout")
