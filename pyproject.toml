@@ -6,7 +6,6 @@ authors = [
 ]
 requires-python = ">=3.8"
 readme = "README.md"
-dependencies = ["flask"]
 description = "Cloud Storage Application"
 
 [build-system]

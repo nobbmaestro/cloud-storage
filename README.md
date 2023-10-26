@@ -15,7 +15,7 @@ Following technologies are being used:
 To install the application, run following command
 
 ```sh
-$ pip install -e .
+$ pip install -r requirements.txt -e .
 ```
 
 ## Run application
