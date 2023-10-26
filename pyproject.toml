@@ -12,3 +12,6 @@ description = "Cloud Storage Application"
 [build-system]
 requires = ["flit_core<4"]
 build-backend = "flit_core.buildapi"
+
+[tool.pytest.ini_options]
+pythonpath = "cloud_storage"

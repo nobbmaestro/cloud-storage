@@ -31,3 +31,11 @@ or add `debug` flag, i.e.,
 ```sh
 $ flask --app cloud_storage run --debug
 ```
+
+## Running tests
+
+To initialize the tests, simply run
+
+```sh
+$ pytest
+```

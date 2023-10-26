@@ -1,9 +1,12 @@
 """Implements helpers function"""
 
+import logging
 import re
 from functools import wraps
 
 from flask import redirect, render_template, session
+
+logger = logging.getLogger(__name__)
 
 
 def login_required(func):
@@ -53,23 +56,23 @@ def validate_password(password):
 
     # Check password length
     if len(password) < 10:
-        print("Password validation: length not sufficient")
         valid = False
+        logger.info("Password validation: length not sufficient")
 
     # Check weather password contains digits
     elif re.search("[0-9]", password) is None:
-        print("Password validation: no digits")
         valid = False
+        logger.info("Password validation: no digits")
 
     # Check weather password contains uppercase characters
     elif re.search("[A-Z]", password) is None:
-        print("Password validation: no uppercase")
         valid = False
+        logger.info("Password validation: no uppercase")
 
     # Check weather password contains special characters
     elif not any(c in special_chars for c in password):
-        print("Password validation: no special chars")
         valid = False
+        logger.info("Password validation: no special chars")
 
     # Above fulfilled, password is valid
     else:
