@@ -1,7 +1,14 @@
 body {
+    /* font */
+    font-family: "Poppins";
+    font-size: 18px;
+
+    /* flex */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+
+    /* colors */
     background-color: #132043;
     color: #fdf0f0;
 }
@@ -30,4 +37,32 @@ nav .nav-link:hover {
 
 .container {
     margin-top: auto;
+}
+
+.table {
+    color: #fdf0f0;
+    background-color: #1f4172;
+}
+
+.form-control {
+    color: #fdf0f0;
+    background-color: #1f4172;
+    border-radius: 25px;
+    border: none;
+    width: 250px;
+    height: 50px;
+}
+
+.form-control:focus {
+    color: #fdf0f0;
+    background-color: #1f4172;
+    border: 1px;
+    border-color: #fdf0f0;
+}
+
+.btn {
+    background-color: #132043;
+    border-radius: 25px;
+    width: 250px;
+    height: 50px;
 }

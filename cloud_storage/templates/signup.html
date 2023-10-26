@@ -4,29 +4,34 @@
 
 {% block main %}
     <form action="/signup" method="post">
-        <div class="mb-3">
-            <input autocomplete="off"
-                   autofocus
-                   class="form-control mx-auto w-auto"
-                   id="username"
-                   name="username"
-                   placeholder="Username"
-                   type="text">
+        <div class="mb-5">
+            <div class="mb-3">
+                <h1>Sign Up</h1>
+            </div>
+            <div class="mb-3">
+                <input autocomplete="off"
+                       autofocus
+                       class="form-control mx-auto text-center"
+                       id="username"
+                       name="username"
+                       placeholder="Username"
+                       type="text">
+            </div>
+            <div class="mb-3">
+                <input class="form-control mx-auto text-center"
+                       id="password"
+                       name="password"
+                       placeholder="Password"
+                       type="password">
+            </div>
+            <div class="mb-3">
+                <input class="form-control mx-auto text-center"
+                       id="password"
+                       name="confirmation"
+                       placeholder="Confirm Password"
+                       type="password">
+            </div>
+            <button class="btn btn-primary" type="submit">Sign up</button>
         </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto"
-                   id="password"
-                   name="password"
-                   placeholder="Password"
-                   type="password">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto"
-                   id="password"
-                   name="confirmation"
-                   placeholder="Confirm Password"
-                   type="password">
-        </div>
-        <button class="btn btn-primary" type="submit">Signup</button>
     </form>
 {% endblock %}
