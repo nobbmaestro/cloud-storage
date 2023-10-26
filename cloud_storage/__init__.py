@@ -12,7 +12,7 @@ def create_app() -> Flask:
     app = Flask(__name__)
 
     # Initialize the database isntance
-    app.config["DATABASE"] = Database("cloud.db")
+    app.config["DATABASE"] = Database("db.sqlite")
 
     # Configure session to use filesystem (instead of signed cookies)
     app.config["SESSION_PERMANENT"] = False
@@ -37,5 +37,5 @@ def after_request(response):
 
 # This is awkward, but this is according to Flash docs
 #   source: https://flask.palletsprojects.com/en/3.0.x/patterns/packages/
-import cloud_storage.views
 import cloud_storage.auth
+import cloud_storage.views
