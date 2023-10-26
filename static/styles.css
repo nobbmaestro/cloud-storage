@@ -1,0 +1,33 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #132043;
+    color: #fdf0f0;
+}
+nav {
+    background-color: #132043;
+}
+footer {
+    margin-top: auto;
+    padding: 50px;
+    height: 250px;
+    background-color: #0f1935;
+}
+
+nav .navbar-brand {
+    font-size: xx-large;
+}
+.navbar-brand img {
+    height: 100px;
+}
+nav .nav-link {
+    color: #fdf0f0;
+}
+nav .nav-link:hover {
+    color: #f1b4bb;
+}
+
+.container {
+    margin-top: auto;
+}
