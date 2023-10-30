@@ -2,7 +2,7 @@
 
 from flask import Flask
 
-from cloud_storage.common import Database
+from cloud_storage.common import Database, FileHandler, StorageHandler
 from flask_session import Session
 
 
@@ -14,6 +14,9 @@ def create_app() -> Flask:
     # Initialize the database isntance
     app.config["DATABASE"] = Database("db.sqlite")
 
+    # Configure the file storage location
+    app.config["UPLOAD_FOLDER"] = "/Users/norbertbatiuk/CloudStorage"
+
     # Configure session to use filesystem (instead of signed cookies)
     app.config["SESSION_PERMANENT"] = False
     app.config["SESSION_TYPE"] = "filesystem"
@@ -24,6 +27,9 @@ def create_app() -> Flask:
 
 # Create application object
 app = create_app()
+db = Database("db.sqlite")
+fm = FileHandler(app, "/Users/norbertbatiuk/CloudStorage/")
+storage_handler = StorageHandler(app, db, fm)
 
 
 @app.after_request
