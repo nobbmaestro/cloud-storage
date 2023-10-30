@@ -20,6 +20,13 @@ class StorageHandler:
         self._db = db
         self._fm = fm
 
+    def add_user(self, user_name: str, password: str) -> bool:
+        """Add user."""
+        success = self._db.add_user(user_name, password)
+        success &= self._fm.create_user_area(user_name)
+
+        return success
+
     def upload_file(self, user_id: int, file: Any) -> bool:
         """Upload `file` to users cloud storage area."""
         user_name = self._db.get_username_by_id(user_id)
