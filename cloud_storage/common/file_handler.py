@@ -32,7 +32,7 @@ class FileHandler:
 
         Return `True` if successful.
         """
-        path = self._get_file_path(user_name)
+        path = self.get_file_path(user_name)
         if not os.path.exists(path):
             os.makedirs(path)
             logger.info("creating path: %s" % path)
@@ -42,7 +42,7 @@ class FileHandler:
     def upload_file(self, user_name: str, file_name: str, file: Any) -> bool:
         """Upload `file` to the `user_name` storage area."""
         success = False
-        path = self._get_file_path(user_name, file_name)
+        path = self.get_file_path(user_name, file_name)
 
         # Check if file extension exists in the whitelist
         if not self.check_file_extension(file_name):
@@ -64,15 +64,25 @@ class FileHandler:
         """Update `file` on the `user_name` storage area."""
         return False
 
+    def remove_file(self, user_name: str, file_name: str) -> bool:
+        """Remove file from the user storage."""
+        success = False
+        if self.check_file_exists(user_name, file_name):
+            path = self.get_file_path(user_name, file_name)
+            os.remove(path)
+            success = not self.check_file_exists(user_name, file_name)
+
+        return success
+
     def check_file_exists(self, user_name: str, file_name: str) -> bool:
         """Check if file exists in the `user_name` storage area."""
-        path = self._get_file_path(user_name, file_name)
+        path = self.get_file_path(user_name, file_name)
         return os.path.exists(path)
 
     def get_file_size(self, user_name: str, file_name: str) -> float:
         """Get size of the file."""
         size = 0.0
-        path = self._get_file_path(user_name, file_name)
+        path = self.get_file_path(user_name, file_name)
 
         if self.check_file_exists(user_name, file_name):
             size = os.stat(path).st_size
@@ -83,7 +93,7 @@ class FileHandler:
         """Get file type based on file extension."""
         return file_name.rsplit(".", 1)[1].lower()
 
-    def _get_file_path(self, user_name: str, file_name: str = "") -> str:
+    def get_file_path(self, user_name: str, file_name: str = "") -> str:
         """Get the absolute path to the file."""
         path = ""
 

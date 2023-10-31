@@ -48,8 +48,22 @@ class StorageHandler:
 
         return success
 
-    def get_file(self, user: str, file_name: str) -> Any:
-        raise NotImplemented
+    def remove_file(self, user_id: int, file_name) -> bool:
+        """Remove `file_name` from the users cloud storage."""
+        user_name = self._db.get_username_by_id(user_id)
+
+        success = self._db.remove_file(user_id, file_name)
+        success &= self._fm.remove_file(user_name, file_name)
+
+        return success
+
+    def get_file_path(self, user_id: int, file_name: str) -> str:
+        path = ""
+        if self.check_file_exists(user_id, file_name):
+            user_name = self._db.get_username_by_id(user_id)
+            path = self._fm.get_file_path(user_name, file_name)
+
+        return path
 
     def _get_secure_filename(self, file_name: str) -> str:
         """Getter for secure version of `file_name`."""

@@ -93,8 +93,35 @@ class Database:
     def update_file(self):
         raise NotImplemented
 
-    def get_files(self, user_id: int) -> list:
-        query = "SELECT * FROM files WHERE user_id = ?"
+    def remove_file(self, user_id: int, file_name) -> bool:
+        """Remove `file_name` associated with the user."""
+        query = "DELETE FROM files WHERE user_id = ? AND file_name = ?"
+
+        success = False
+        # Check whether file_name exists
+        if self.check_file_exists(user_id, file_name):
+            self._execute_query(query, [user_id, file_name])
+            self._commit()
+
+            success = not self.check_file_exists(user_id, file_name)
+
+        return success
+
+    def get_list_of_files(self, user_id: int, order_by: str = "file_name", ascending: bool = True) -> list:
+        """Get list of files for a given `user_id`."""
+        query = "SELECT * FROM files WHERE user_id = ? ORDER BY #1 #2"
+
+        # Verify and assign column name given by the user
+        if order_by in ["file_name", "type", "modified", "size"]:
+            query = query.replace("#1", order_by)
+        else:
+            query = query.replace("#1", "file_name")
+
+        # Assign order direction
+        if ascending:
+            query = query.replace("#2", "ASC")
+        else:
+            query = query.replace("#2", "DESC")
 
         try:
             files = self._execute_query(query, [user_id])
