@@ -43,7 +43,7 @@ def signup():
         return redirect("/")
 
     else:
-        return render_template("signup.html")
+        return render_template("auth/signup.html")
 
 
 @app.route("/logout")
@@ -89,4 +89,4 @@ def login():
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("login.html")
+        return render_template("auth/login.html")

@@ -18,7 +18,7 @@ def index():
 
     else:
         storage = storage_handler._db.get_list_of_files(session["user_id"])
-        return render_template("index.html", storage=storage)
+        return render_template("views/index.html", storage=storage)
 
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -47,56 +47,7 @@ def upload():
             return redirect(url_for("upload", name=file_name))
 
     else:
-        return render_template("upload_file.html")
-
-
-@app.route("/download", methods=["GET"])
-@login_required
-def download():
-    """Download file to the cloud storage."""
-    file_name = request.args.get("file_name", "")
-    path = storage_handler.get_file_path(session["user_id"], file_name)
-
-    # Ensure file_name is specified in the URL
-    if not file_name:
-        flash("File name not given")
-
-    # Ensure file_name exists
-    elif not path:
-        flash("File not found")
-
-    else:
-        try:
-            return send_file(path, as_attachment=True)
-
-        except:
-            flash("Something went wrong", category="error")
-
-    return redirect("/")
-
-
-@app.route("/remove", methods=["GET"])
-@login_required
-def remove():
-    """Remove file from the cloud storage."""
-    file_name = request.args.get("file_name", "")
-    path = storage_handler.get_file_path(session["user_id"], file_name)
-
-    # Ensure file_name is specified in the URL
-    if not file_name:
-        flash("File name not given")
-
-    # Ensure file_name exists
-    elif not path:
-        flash("File not found")
-
-    else:
-        if storage_handler.remove_file(session["user_id"], file_name):
-            flash("File '%s' removed" % file_name)
-        else:
-            flash("Something went wrong", category="error")
-
-    return redirect("/")
+        return render_template("views/upload_file.html")
 
 
 @app.route("/search", methods=["GET", "POST"])
@@ -107,7 +58,7 @@ def search():
 
     if request.method == "POST":
         matches = storage_handler.search_file(session["user_id"], file_name)
-        return render_template("index.html", storage=matches)
+        return render_template("views/index.html", storage=matches)
 
     else:
-        return render_template("search.html")
+        return render_template("views/search.html")
