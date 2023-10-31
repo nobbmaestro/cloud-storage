@@ -54,7 +54,7 @@ def upload():
 @login_required
 def download():
     """Download file to the cloud storage."""
-    file_name = request.args.get("file_name")
+    file_name = request.args.get("file_name", "")
     path = storage_handler.get_file_path(session["user_id"], file_name)
 
     # Ensure file_name is specified in the URL
@@ -79,7 +79,7 @@ def download():
 @login_required
 def remove():
     """Remove file from the cloud storage."""
-    file_name = request.args.get("file_name")
+    file_name = request.args.get("file_name", "")
     path = storage_handler.get_file_path(session["user_id"], file_name)
 
     # Ensure file_name is specified in the URL
@@ -103,7 +103,7 @@ def remove():
 @login_required
 def search():
     """Search for file in the users cloud storage."""
-    file_name = request.form.get("filename")
+    file_name = request.form.get("filename", "")
 
     if request.method == "POST":
         matches = storage_handler.search_file(session["user_id"], file_name)
