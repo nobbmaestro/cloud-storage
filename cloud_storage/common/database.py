@@ -159,3 +159,27 @@ class Database:
             exists = True
 
         return exists
+
+    def search_file(self, user_id: int, file_name: str, beg_pattern: bool = True, end_pattern: bool = True) -> list:
+        """Search for `file_name` pattern in users database."""
+        query = """
+            SELECT
+                file_name, file_type, created_at, updated_at, file_size
+            FROM
+                files
+            WHERE
+                user_id = ? AND file_name LIKE ?
+            ORDER BY
+                file_name ASC
+        """
+
+        if beg_pattern and end_pattern:
+            pattern = "%%%s%%" % file_name
+        elif beg_pattern:
+            pattern = "%%%s" % file_name
+        elif end_pattern:
+            pattern = "%s%%" % file_name
+        else:
+            pattern = "%s" % file_name
+
+        return self._execute_query(query, [user_id, pattern])

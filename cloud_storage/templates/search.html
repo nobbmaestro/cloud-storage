@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block main %}
+    <form action="/search" method="post">
+        <div class="mb-5">
+            <div class="mb-3">
+                <h1>Search</h1>
+            </div>
+            <div class="mb-3">
+                <input autocomplete="off"
+                       autofocus
+                       class="form-control mx-auto text-center"
+                       id="filename"
+                       name="filename"
+                       placeholder="Filename"
+                       type="text">
+            </div>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+{% endblock %}

@@ -72,3 +72,7 @@ class StorageHandler:
     def check_file_exists(self, user_id: int, file_name: str) -> bool:
         """Search `user` storage for `file_name`."""
         return self._db.check_file_exists(user_id, file_name)
+
+    def search_file(self, user_id: int, file_name: str) -> list:
+        """Search for `file_name` pattern in the users clourd storage."""
+        return self._db.search_file(user_id, file_name)

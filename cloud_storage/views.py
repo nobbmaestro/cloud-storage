@@ -97,3 +97,17 @@ def remove():
             flash("Something went wrong", category="error")
 
     return redirect("/")
+
+
+@app.route("/search", methods=["GET", "POST"])
+@login_required
+def search():
+    """Search for file in the users cloud storage."""
+    file_name = request.form.get("filename")
+
+    if request.method == "POST":
+        matches = storage_handler.search_file(session["user_id"], file_name)
+        return render_template("index.html", storage=matches)
+
+    else:
+        return render_template("search.html")
