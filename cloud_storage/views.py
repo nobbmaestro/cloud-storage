@@ -1,7 +1,6 @@
 """Views."""
 
-from flask import (flash, redirect, render_template, request, send_file,
-                   session, url_for)
+from flask import flash, redirect, render_template, request, session, url_for
 from werkzeug.utils import secure_filename
 
 from cloud_storage import app, storage_handler
