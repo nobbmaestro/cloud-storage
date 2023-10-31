@@ -30,55 +30,7 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-md">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">
-                    <img src="/static/logo.png" alt="/static/logo.png" />
-                </a>
-                <button
-                    aria-controls="navbar"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    class="navbar-toggler navbar-dark"
-                    data-bs-target="#navbar"
-                    data-bs-toggle="collapse"
-                    type="button"
-                >
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbar">
-                    {% if session["user_id"] %}
-                    <ul class="navbar-nav me-auto mt-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/upload">upload</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/search">search</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ms-auto mt-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/logout">Log Out</a>
-                        </li>
-                    </ul>
-                    {% else %}
-                    <ul class="navbar-nav ms-auto mt-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/signup">Signup</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Log In</a>
-                        </li>
-                    </ul>
-                    {% endif %}
-                </div>
-            </div>
-        </nav>
-
-        {% if get_flashed_messages() %}
+        {% include "components/navbar.html" %} {% if get_flashed_messages() %}
         <header>
             <div class="alert alert-primary mb-0 text-center" role="alert">
                 {{ get_flashed_messages() | join(" ") }}
@@ -90,6 +42,6 @@
             {% block main %}{% endblock %}
         </main>
 
-        <footer class="small text-center text-muted">Footer placeholder</footer>
+        {% include "components/footer.html" %}
     </body>
 </html>
