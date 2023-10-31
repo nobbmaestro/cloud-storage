@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block main %}
+    <div class="file_navigator">
+        <table class="table table-hover table-striped table-light"
+            <thead class="thead-dark">
+                <tr>
+                    <th style="width: 1ch;"></th>
+                    <th class="text-start">Name</th>
+                    <th class="text-start">Type</th>
+                    <th class="text-start">Modified</th>
+                    <th class="text-end">Size</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in storage %}
+                    <tr>
+                        <td class="text-end">
+                            {% if file["file_type"] == "directory" %}>{% endif %}
+                        </td>
+                        <td class="text-start">{{ file["file_name"] }}</td>
+                        <td class="text-start">{{ file["file_type"] }}</td>
+                        {% if file["updated_at"] == "None" %}
+                            <td class="text-start">{{ file["updated_at"] }}</td>
+                        {% else %}
+                            <td class="text-start">{{ file["created_at"] }}</td>
+                        {% endif %}
+                        <td class="text-end">{{ file["file_size"] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
