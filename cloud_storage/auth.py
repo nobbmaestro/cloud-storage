@@ -83,7 +83,6 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = storage_handler._db.get_user_id(username)
-        print(session)
 
         # Redirect user to home page
         return redirect("/")
