@@ -1,5 +1,7 @@
 """Views."""
 
+import json
+
 from flask import (flash, redirect, render_template, request, send_file,
                    session, url_for)
 from werkzeug.utils import secure_filename
@@ -54,7 +56,7 @@ def upload():
 @login_required
 def download():
     """Download file to the cloud storage."""
-    file_name = request.args.get("file_name")
+    file_name = request.args.get("file_name", "")
     path = storage_handler.get_file_path(session["user_id"], file_name)
 
     # Ensure file_name is specified in the URL
@@ -79,7 +81,7 @@ def download():
 @login_required
 def remove():
     """Remove file from the cloud storage."""
-    file_name = request.args.get("file_name")
+    file_name = request.args.get("file_name", "")
     path = storage_handler.get_file_path(session["user_id"], file_name)
 
     # Ensure file_name is specified in the URL
@@ -103,7 +105,7 @@ def remove():
 @login_required
 def search():
     """Search for file in the users cloud storage."""
-    file_name = request.form.get("filename")
+    file_name = request.form.get("query", "")
 
     if request.method == "POST":
         matches = storage_handler.search_file(session["user_id"], file_name)
@@ -111,3 +113,20 @@ def search():
 
     else:
         return render_template("search.html")
+
+
+@app.route("/suggest", methods=["GET"])
+@login_required
+def suggestions():
+    file_name = request.args.get("query", "")
+    data = storage_handler.search_file(session["user_id"], file_name)
+
+    ret = {}
+    limit = 6
+    for i, value in enumerate(data):
+        if i < limit:
+            ret[i] = value.get("file_name")
+        else:
+            break
+
+    return json.dumps(ret, indent=4)

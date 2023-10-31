@@ -12,12 +12,50 @@
                 <input autocomplete="off"
                        autofocus
                        class="form-control mx-auto text-center"
-                       id="filename"
-                       name="filename"
+                       id="search"
+                       name="query"
                        placeholder="Filename"
                        type="text">
             </div>
+            <div id="suggestions"></div>
             <button class="btn btn-primary" type="submit">Search</button>
         </div>
     </form>
+    <script>
+        document.addEventListener("keyup", function (event) {
+            if (event.key != "Enter") {
+
+                // obtain the current search query
+                search_query = document.getElementById("query").value;
+                
+                // perform GET request to the API
+                if (search_query != "") {
+                    $.ajax({
+                        type: "GET",
+                        url:  "/suggest",
+                        data: { "query": search_query }, 
+                        success: function(data) {
+                            const data_json = JSON.parse(data)
+                            var suggestions_div = document.getElementById("suggestions");
+                            
+                            // Clear the div prior to the population
+                            suggestions_div.innerHTML = "";
+
+                            // Ensure we have recieved suggestions 
+                            if (Object.keys(data_json).length > 0) {
+
+                                // Add each suggestion to the div
+                                for (const key in data_json) {
+                                    const node = document.createElement("li");
+                                    const text_node = document.createTextNode(data_json[key]);
+                                    node.appendChild(text_node);
+                                    suggestions_div.appendChild(node);
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        })
+    </script>
 {% endblock %}
