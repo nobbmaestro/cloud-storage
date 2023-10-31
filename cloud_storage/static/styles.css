@@ -57,6 +57,10 @@ nav .nav-link:hover {
     border-color: #fdf0f0;
 }
 
+#search {
+    width: 500px;
+}
+
 .btn {
     background-color: #132043;
     border-radius: 25px;
