@@ -23,11 +23,11 @@
                         <td class="text-start">{{ file["file_name"] }}</td>
                         <td class="text-start">{{ file["file_type"] }}</td>
                         {% if file["updated_at"] == "None" %}
-                            <td class="text-start">{{ file["updated_at"] }}</td>
+                            <td class="text-start">{{ file["updated_at"] | rel_dtime }}</td>
                         {% else %}
-                            <td class="text-start">{{ file["created_at"] }}</td>
+                            <td class="text-start">{{ file["created_at"] | rel_dtime }}</td>
                         {% endif %}
-                        <td class="text-end">{{ file["file_size"] }}</td>
+                        <td class="text-end">{{ file["file_size"] | file_size }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

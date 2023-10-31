@@ -2,8 +2,10 @@
 virtualenv==20.23.0
 pip-tools==6.13.0
 pytest==7.4.3
+pip==23.1
 
 # application
 Flask
 Flask-Session
 requests
+babel==2.13.1

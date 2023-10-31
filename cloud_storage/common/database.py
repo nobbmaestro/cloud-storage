@@ -18,7 +18,9 @@ class Database:
     """Implements database class."""
 
     def __init__(self, database_name, strategy: Callable = dict_factory):
-        self.conn = sqlite3.connect(database_name, check_same_thread=False)
+        self.conn = sqlite3.connect(
+            database_name, check_same_thread=False, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
+        )
         self.conn.row_factory = strategy
         self.cursor = self.conn.cursor()
 
