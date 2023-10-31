@@ -39,11 +39,6 @@ nav .nav-link:hover {
     margin-top: auto;
 }
 
-.table {
-    color: #fdf0f0;
-    background-color: #1f4172;
-}
-
 .form-control {
     color: #fdf0f0;
     background-color: #1f4172;
@@ -52,7 +47,9 @@ nav .nav-link:hover {
     width: 250px;
     height: 50px;
 }
-
+.form-control::file-selector-button {
+    height: 50px;
+}
 .form-control:focus {
     color: #fdf0f0;
     background-color: #1f4172;
