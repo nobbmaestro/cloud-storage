@@ -27,9 +27,24 @@ class StorageHandler:
 
         return success
 
-    def upload_file(self, user_id: int, file: Any) -> bool:
-        """Upload `file` to users cloud storage area."""
+    def upload_file(self, user_id: int, files: List[Any]) -> bool:
+        """Upload `file`(s) to user cloud storage area."""
         user_name = self._db.get_username_by_id(user_id)
+    
+        success = False
+        if isinstance(files, list):
+            for file in files:
+                success = self._upload_file(user_id, user_name, file) 
+                if not success:
+                    break
+
+        elif isinstance(files, str):
+            success = self._upload_file(user_id, user_name, files)
+
+        return success
+
+    def _upload_file(self, user_id: int, user_name: str, file: Any) -> bool:
+        """Upload `file` to user cloud storage area."""
 
         # Collect file meta data
         file_name = self._get_secure_filename(file.filename)

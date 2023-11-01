@@ -1,7 +1,6 @@
 """Views."""
 
 from flask import flash, redirect, render_template, request, session, url_for
-from werkzeug.utils import secure_filename
 
 from cloud_storage import app, storage_handler
 from cloud_storage.common import apology, login_required
@@ -29,21 +28,21 @@ def upload():
             flash("No file part")
             return redirect(request.url)
 
-        file = request.files["file"]
+        files = request.files.getlist("file")
 
-        if file.filename == "":
-            flash("No selected file")
-            return redirect(request.url)
+        for file in files:
+            if file.filename == "":
+                flash("No file selected")
+                return redirect(request.url)
 
-        if file:
-            file_name = secure_filename(file.filename)
-            success = storage_handler.upload_file(session["user_id"], file)
+        if files:
+            success = storage_handler.upload_file(session["user_id"], files)
             if success:
-                flash("'%s' uploaded" % file_name)
+                flash("Uploaded")
             else:
                 return apology("Something went wrong")
 
-            return redirect(url_for("upload", name=file_name))
+            return redirect(url_for("upload", name=files))
 
     else:
         return render_template("views/upload_file.html")
