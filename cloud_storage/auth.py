@@ -4,6 +4,7 @@ from flask import redirect, render_template, request, session
 
 from cloud_storage import app, storage_handler
 from cloud_storage.common import apology, validate_password
+from cloud_storage.database import UserAlreadyExists
 
 # Obtain the database object
 db = app.config["DATABASE"]
@@ -36,8 +37,12 @@ def signup():
             return apology("not sufficient password", 400)
 
         # Create user storage area
-        if not storage_handler.add_user(username, password):
-            return apology("username already exists")
+        else:
+            try:
+                storage_handler.add_user(username, password)
+
+            except UserAlreadyExists:
+                return apology("username already exists")
 
         # Redirect iser to home page
         return redirect("/")

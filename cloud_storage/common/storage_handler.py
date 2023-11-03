@@ -6,8 +6,9 @@ from typing import Any
 from flask import Flask
 from werkzeug.utils import secure_filename
 
-from cloud_storage.common import Database, FileHandler
+from cloud_storage.common import FileHandler
 from cloud_storage.common.file_handler import FileNotAllowed
+from cloud_storage.database import Database
 
 logger = logging.getLogger(__name__)
 

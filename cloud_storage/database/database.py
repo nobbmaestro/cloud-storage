@@ -4,42 +4,39 @@ import sqlite3
 from datetime import datetime
 from typing import Callable
 
-from werkzeug.security import check_password_hash, generate_password_hash
-
-
-def dict_factory(cursor, row):
-    d = {}
-    for idx, col in enumerate(cursor.description):
-        d[col[0]] = row[idx]
-    return d
+from .exceptions import UserAlreadyExists
+from .strategies import PasswordHashManager, dict_factory
 
 
 class Database:
     """Implements database class."""
 
-    def __init__(self, database_name, strategy: Callable = dict_factory):
-        self.conn = sqlite3.connect(
+    def __init__(
+        self, database_name, hash_strategy: Callable = PasswordHashManager, row_strategy: Callable = dict_factory
+    ):
+        self._conn = sqlite3.connect(
             database_name, check_same_thread=False, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
         )
-        self.conn.row_factory = strategy
-        self.cursor = self.conn.cursor()
+        self._conn.row_factory = row_strategy
+        self._cursor = self._conn.cursor()
+        self._hash_stragegy = hash_strategy()
 
     def _execute_query(self, query, params: list = []):
         """Execute query."""
         if params:
-            self.cursor.execute(query, params)
+            self._cursor.execute(query, params)
         else:
-            self.cursor.execute(query)
+            self._cursor.execute(query)
 
-        return self.cursor.fetchall()
+        return self._cursor.fetchall()
 
     def _commit(self):
         """Commit changes to database."""
-        self.conn.commit()
+        self._conn.commit()
 
     def _close(self):
         """Close database connection."""
-        self.conn.close()
+        self._conn.close()
 
     def check_user_exists(self, user_name: str) -> bool:
         """Check if `user_name` exists in database."""
@@ -54,7 +51,7 @@ class Database:
         rows = self._execute_query("SELECT * FROM users WHERE user_name = ?", [user_name])
 
         # Ensure username exists and password is correct
-        if len(rows) == 1 and check_password_hash(rows[0]["hash"], password):
+        if len(rows) == 1 and self._hash_stragegy.check_password(rows[0]["hash"], password):
             match = True
 
         return match
@@ -65,18 +62,21 @@ class Database:
         # Check whether username already exists, insert to database if no matches exists
         if not self.check_user_exists(user_name):
             # Create password hash
-            hash = generate_password_hash(password)
+            hash = self._hash_stragegy.generate_hash(password)
 
             # Insert user into the database
             self._execute_query("INSERT INTO users (user_name, hash) VALUES(?, ?)", [user_name, hash])
             self._commit()
             success = self.check_user_exists(user_name)
 
+        else:
+            raise UserAlreadyExists("user `%s` already exists" % user_name)
+
         return success
 
     def upload_file(self, user_id: int, file_name: str, file_size: float, file_type: str) -> bool:
         """Upload the associated meta data of a given file to the database."""
-        timestamp = datetime.now()
+        timestamp = datetime.utcnow()
         params = [file_name, file_type, file_size, user_id, timestamp, 0]
         query = "INSERT INTO files (file_name, file_type, file_size, user_id, created_at, revision) VALUES (?, ?, ?, ?, ?, ?)"
 
@@ -95,8 +95,8 @@ class Database:
     def update_file(self):
         raise NotImplemented
 
-    def remove_file(self, user_id: int, file_name) -> bool:
-        """Remove `file_name` associated with the user."""
+    def delete_file(self, user_id: int, file_name) -> bool:
+        """Delete `file_name` associated with the user."""
         query = "DELETE FROM files WHERE user_id = ? AND file_name = ?"
 
         success = False

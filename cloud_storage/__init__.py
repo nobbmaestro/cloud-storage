@@ -2,9 +2,10 @@
 
 from flask import Flask
 
-from cloud_storage.common import (Database, FileHandler, StorageHandler,
+from cloud_storage.common import (FileHandler, StorageHandler,
                                   pretty_file_size_format,
                                   pretty_relative_datetime_format)
+from cloud_storage.database import Database
 from flask_session import Session
 
 
@@ -50,4 +51,5 @@ def after_request(response):
 # This is awkward, but this is according to Flash docs
 #   source: https://flask.palletsprojects.com/en/3.0.x/patterns/packages/
 import cloud_storage.auth
+import cloud_storage.util
 import cloud_storage.views
