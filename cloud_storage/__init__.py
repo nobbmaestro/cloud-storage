@@ -34,7 +34,7 @@ def create_app() -> Flask:
 # Create application object
 app = create_app()
 db = Database("db.sqlite")
-fm = FileHandler(app, "/Users/norbertbatiuk/CloudStorage/")
+fm = FileHandler("/Users/norbertbatiuk/CloudStorage/")
 storage_handler = StorageHandler(app, db, fm)
 
 

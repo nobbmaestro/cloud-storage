@@ -1,6 +1,10 @@
 """Database Exceptions."""
 
 
+class FileAlreadyExists(Exception):
+    """Raised when given `file_name` already exists in the storage."""
+
+
 class FileNotAllowed(Exception):
     """Raised when non-whitelisted file extension is given."""
 

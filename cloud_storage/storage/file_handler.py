@@ -2,11 +2,11 @@
 
 import logging
 import os
-from typing import Any
+from typing import Any, Tuple
 
-from flask import Flask
+from werkzeug.datastructures import FileStorage
 
-from .exceptions import FileNotAllowed
+from .exceptions import FileAlreadyExists, FileNotAllowed
 
 logger = logging.getLogger(__name__)
 
@@ -17,11 +17,22 @@ logger = logging.getLogger(__name__)
 class FileHandler:
     """Implements FileHandler class."""
 
-    _whitelist = {"txt", "pdf", "png", "jpg", "jpeg", "gif", "mov"}
+    _whitelist = ("txt", "pdf", "png", "jpg", "jpeg", "gif", "mov")
 
-    def __init__(self, app: Flask, root: str) -> None:
-        self._app = app
+    def __init__(self, root: str) -> None:
         self._root_path = root
+
+    @property
+    def whitelist(self) -> Tuple:
+        """List of accepted file extensions."""
+        return self._whitelist
+
+    @whitelist.setter
+    def whitelist(self, new_list: tuple):
+        """List of accepted file extensions."""
+        if not isinstance(new_list, tuple):
+            raise ValueError("given new_list is not a list type.")
+        self._whitelist = new_list
 
     def create_user_area(self, user_name: str) -> bool:
         """Create `user_name` storage area.
@@ -35,26 +46,23 @@ class FileHandler:
 
         return os.path.exists(path)
 
-    def upload_file(self, user_name: str, file_name: str, file: Any) -> bool:
+    def upload_file(self, user_name: str, file_name: str, file: FileStorage) -> bool:
         """Upload `file` to the `user_name` storage area."""
-        success = False
         path = self.get_file_path(user_name, file_name)
 
         # Check if file extension exists in the whitelist
-        if not self.check_file_extension(file_name):
+        if not self._check_file_extension(file_name):
             raise FileNotAllowed
 
         # Check if file already exists
-        if not self.check_file_exists(user_name, file_name):
+        elif self.check_file_exists(user_name, file_name):
+            raise FileAlreadyExists("file `%s` already exists" % file_name)
+
+        else:
             logger.info("uploading file: %s" % file_name)
             file.save(path)
 
-        else:
-            self.update_file(user_name, file)
-
-        success = self.check_file_exists(user_name, file_name)
-
-        return success
+        return self.check_file_exists(user_name, file_name)
 
     def update_file(self, user_name, file: Any) -> bool:
         """Update `file` on the `user_name` storage area."""
@@ -100,6 +108,6 @@ class FileHandler:
 
         return path
 
-    def check_file_extension(self, file_name):
+    def _check_file_extension(self, file_name):
         """Check if file extension exists on the whitelist."""
         return "." in file_name and file_name.rsplit(".", 1)[1].lower() in self._whitelist
