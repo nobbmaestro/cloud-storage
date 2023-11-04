@@ -5,7 +5,7 @@ import sqlite3
 
 import pytest
 
-from cloud_storage.database import Database
+from cloud_storage.storage import Database
 
 
 @pytest.fixture(scope="session", name="mock_db_dir_path")

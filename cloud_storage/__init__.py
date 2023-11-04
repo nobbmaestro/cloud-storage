@@ -2,10 +2,9 @@
 
 from flask import Flask
 
-from cloud_storage.common import (FileHandler, StorageHandler,
-                                  pretty_file_size_format,
+from cloud_storage.common import (pretty_file_size_format,
                                   pretty_relative_datetime_format)
-from cloud_storage.database import Database
+from cloud_storage.storage import Database, FileHandler, StorageHandler
 from flask_session import Session
 
 

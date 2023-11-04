@@ -4,7 +4,7 @@ from flask import redirect, render_template, request, session
 
 from cloud_storage import app, storage_handler
 from cloud_storage.common import apology, validate_password
-from cloud_storage.database import UserAlreadyExists
+from cloud_storage.storage import UserAlreadyExists
 
 # Obtain the database object
 db = app.config["DATABASE"]

@@ -5,8 +5,8 @@ from typing import Any, List
 
 import pytest
 
-from cloud_storage.database import Database, UserAlreadyExists, UserNotFound
-from cloud_storage.database.strategies import PasswordHashManager
+from cloud_storage.storage import Database, UserAlreadyExists, UserNotFound
+from cloud_storage.storage.strategies import PasswordHashManager
 
 
 @pytest.fixture(scope="function")

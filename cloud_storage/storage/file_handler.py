@@ -6,16 +6,12 @@ from typing import Any
 
 from flask import Flask
 
+from .exceptions import FileNotAllowed
+
 logger = logging.getLogger(__name__)
 
 # TODO: Add support for file compression
 #   read more: https://www.tutorialspoint.com/how-to-compress-files-with-zipfile-module-in-python
-
-
-class FileNotAllowed(Exception):
-    """Raised when non-whitelisted file extension is given."""
-
-    pass
 
 
 class FileHandler:
