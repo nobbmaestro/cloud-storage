@@ -32,7 +32,7 @@ def fixture_mock_db_path(mock_db_dir_path):
 
 @pytest.fixture(scope="session", name="sql_script")
 def sqlite_schema() -> str:
-    with open("schema.sql", "r") as sql_file:
+    with open("cloud_storage/database/schema.sql", "r") as sql_file:
         sql_script = sql_file.read()
 
     return sql_script 

@@ -55,6 +55,7 @@ class TestPasswordHashManager:
         hash = self._test_obj.generate_hash(value)
         assert self._test_obj.check_password(hash, value)
 
+
 @pytest.mark.usefixtures("setup_and_teardown")
 class TestDatabase:
     """Collection of test suits for Database."""
