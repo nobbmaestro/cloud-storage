@@ -4,9 +4,12 @@
 
 {% block main %}
     <div class="file_navigator">
+        {% include "components/toolbox.html" %}
+
         <table class="table table-hover table-striped table-light"
             <thead class="thead-dark">
                 <tr>
+                    <th style="width: 1ch;"></th>
                     <th style="width: 1ch;"></th>
                     <th class="text-start">Name</th>
                     <th class="text-start">Type</th>
@@ -14,13 +17,19 @@
                     <th class="text-end">Size</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="table">
                 {% for file in storage %}
                     <tr>
+                        <td>
+                            <input type="checkbox"
+                                   id="checkbox-{{ loop.index }}"
+                                   name="file_select"
+                                   value="">
+                        </td>
                         <td class="text-end">
                             {% if file["file_type"] == "directory" %}>{% endif %}
                         </td>
-                        <td class="text-start">{{ file["file_name"] }}</td>
+                        <td class="text-start" id="file{{ loop.index }}">{{ file["file_name"] }}</td>
                         <td class="text-start">{{ file["file_type"] }}</td>
                         {% if file["updated_at"] == "None" %}
                             <td class="text-start">{{ file["updated_at"] | rel_dtime }}</td>
@@ -33,4 +42,42 @@
             </tbody>
         </table>
     </div>
+    <script>
+        function performGetRequest(route, list_of_files) {
+            url = route + "?query=" + list_of_files.toString();
+            window.location = (url);
+        }
+
+        function getSelectedFiles() {
+            selected = [];
+            var index = 1;
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+            // Get status of each checkbox, get file_name if selected
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const file_id = "file" + index;
+                    const file = document.getElementById(file_id).innerHTML;
+                    selected.push(file);
+                }
+                index++;
+            })
+
+            return selected;
+        }
+
+        function actionRunner(target) {
+            route = document.getElementById(target).getAttribute("href");
+            files = getSelectedFiles();
+            performGetRequest(route, files);
+        }
+
+        document.getElementById("toolbox-item-1").addEventListener("click", function(event) {
+            actionRunner("toolbox-item-1");
+        })
+
+        document.getElementById("toolbox-item-2").addEventListener("click", function(event) {
+            actionRunner("toolbox-item-2");
+        })
+    </script>
 {% endblock %}

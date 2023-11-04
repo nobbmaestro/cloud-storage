@@ -79,3 +79,19 @@ def validate_password(password):
         valid = True
 
     return valid
+
+
+def purge_list(unfiltered: list) -> list:
+    """Purges list."""
+
+    def check_empty(item: str):
+        return item != ""
+
+    def check_invalid(item: str):
+        return item != '""'
+
+    filtered = unfiltered.copy()
+    filtered = list(filter(check_empty, filtered))
+    filtered = list(filter(check_invalid, filtered))
+
+    return filtered

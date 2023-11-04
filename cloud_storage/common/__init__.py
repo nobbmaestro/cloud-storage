@@ -2,7 +2,7 @@
 
 from .file_handler import FileHandler
 from .filters import pretty_file_size_format, pretty_relative_datetime_format
-from .helpers import apology, login_required, validate_password
+from .helpers import apology, login_required, purge_list, validate_password
 from .storage_handler import StorageHandler
 
 __all__ = (
@@ -12,5 +12,6 @@ __all__ = (
     "login_required",
     "pretty_file_size_format",
     "pretty_relative_datetime_format",
+    "purge_list",
     "validate_password",
 )

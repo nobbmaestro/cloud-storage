@@ -1,7 +1,7 @@
 """StorageHandler class."""
 
 import logging
-from typing import Any
+from typing import Any, List
 
 from flask import Flask
 from werkzeug.utils import secure_filename
@@ -31,11 +31,11 @@ class StorageHandler:
     def upload_file(self, user_id: int, files: List[Any]) -> bool:
         """Upload `file`(s) to user cloud storage area."""
         user_name = self._db.get_username_by_id(user_id)
-    
+
         success = False
         if isinstance(files, list):
             for file in files:
-                success = self._upload_file(user_id, user_name, file) 
+                success = self._upload_file(user_id, user_name, file)
                 if not success:
                     break
 
@@ -64,12 +64,30 @@ class StorageHandler:
 
         return success
 
-    def remove_file(self, user_id: int, file_name) -> bool:
-        """Remove `file_name` from the users cloud storage."""
+    def delete_file(self, user_id: int, file_names: list) -> bool:
+        """Delete `file_name` from the users cloud storage."""
         user_name = self._db.get_username_by_id(user_id)
 
-        success = self._db.remove_file(user_id, file_name)
-        success &= self._fm.remove_file(user_name, file_name)
+        success = False
+        if isinstance(file_names, list):
+            for file_name in file_names:
+                success = self._delete_file(user_id, user_name, file_name)
+                if not success:
+                    break
+
+        elif isinstance(file_names, str):
+            success = self._delete_file(user_id, user_name, file_names)
+
+        return success
+
+    def _delete_file(self, user_id: int, user_name: str, file_name: str) -> bool:
+        """Delete `file_name` from the users cloud storage."""
+        if self.check_file_exists(user_id, file_name):
+            success = self._db.delete_file(user_id, file_name)
+            success &= self._fm.delete_file(user_name, file_name)
+
+        else:
+            raise FileNotFoundError("'%s' not found" % file_name)
 
         return success
 

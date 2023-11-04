@@ -64,8 +64,8 @@ class FileHandler:
         """Update `file` on the `user_name` storage area."""
         return False
 
-    def remove_file(self, user_name: str, file_name: str) -> bool:
-        """Remove file from the user storage."""
+    def delete_file(self, user_name: str, file_name: str) -> bool:
+        """Delete file from the user storage."""
         success = False
         if self.check_file_exists(user_name, file_name):
             path = self.get_file_path(user_name, file_name)
