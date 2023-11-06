@@ -71,7 +71,7 @@ class TestDatabase:
     def test_add_user(self, mock_db: Database):
         """Verifies `add_user` method."""
         # Replace default hash strategy with dummy
-        mock_db._hash_stragegy = DummyPasswordHashManager()
+        mock_db.hash_strategy = DummyPasswordHashManager
 
         # Add the new user and obtain the results from the database
         self._helper_add_user(mock_db)

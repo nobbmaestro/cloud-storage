@@ -14,17 +14,36 @@ class Database:
     def __init__(
         self,
         database_name,
-        hash_strategy: Callable = PasswordHashManager,
-        row_strategy: Callable = dict_factory,
+        HashStrategy: Callable = PasswordHashManager,
+        row_factory: Callable = dict_factory,
     ):
         self._conn = sqlite3.connect(
             database_name,
             check_same_thread=False,
             detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES,
         )
-        self._conn.row_factory = row_strategy
+        self._conn.row_factory = row_factory
         self._cursor = self._conn.cursor()
-        self._hash_stragegy = hash_strategy()
+        self._hash_strategy = HashStrategy()
+
+    @property
+    def hash_strategy(self) -> Callable:
+        """Password hashing strategy object."""
+        return self._hash_strategy
+
+    @hash_strategy.setter
+    def hash_strategy(self, Strategy: Callable) -> None:
+        """Password hashing strategy object."""
+        # Ensure `generate_hash` method exists
+        if "generate_hash" not in dir(Strategy):
+            raise ValueError
+
+        # Ensure `check_password` method exists
+        elif "check_password" not in dir(Strategy):
+            raise ValueError
+
+        else:
+            self._hash_strategy = Strategy()
 
     def _execute_query(self, query, params: list = []):
         """Execute query."""
@@ -49,7 +68,7 @@ class Database:
         # Check whether username already exists, insert to database if no matches exists
         if not self.check_user_exists(user_name):
             # Create password hash
-            hash = self._hash_stragegy.generate_hash(password)
+            hash = self.hash_strategy.generate_hash(password)
 
             # Insert user into the database
             self._execute_query("INSERT INTO users (user_name, password) VALUES(?, ?)", [user_name, hash])
@@ -109,7 +128,7 @@ class Database:
         rows = self._execute_query("SELECT * FROM users WHERE user_name = ?", [user_name])
 
         # Ensure username exists and password is correct
-        if len(rows) == 1 and self._hash_stragegy.check_password(rows[0]["password"], password):
+        if len(rows) == 1 and self.hash_strategy.check_password(rows[0]["password"], password):
             match = True
 
         return match
